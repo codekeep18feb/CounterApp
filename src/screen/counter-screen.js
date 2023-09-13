@@ -22,6 +22,7 @@ const CounterScreen = (props) => {
 
   return (
     <Container component="main">
+      <div>v2</div>
       <div className={classes.paper}>
         <CounterComponent />
         <div className= {classes.buttonContainer}>

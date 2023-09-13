@@ -37,14 +37,14 @@ jobs:
             echo "Script is starting"
             cd /home/ubuntu/CounterApp &&
             echo "Changed directory"
-            git checkout master &&
-            echo "Checked out master branch"
+            git checkout main &&
+            echo "Checked out main branch"
             git fetch --all &&
             echo "Fetched all branches"
-            git reset --hard origin/master &&
-            echo "Reset to origin/master"
-            git pull origin master &&
-            echo "Pulled changes from origin/master"
+            git reset --hard origin/main &&
+            echo "Reset to origin/main"
+            git pull origin main &&
+            echo "Pulled changes from origin/main"
             docker-compose -f docker-compose.prod.yml up -d --build
             echo "Docker Compose command executed"
           '
