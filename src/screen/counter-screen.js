@@ -7,42 +7,41 @@ import CounterComponent from "../component/counter-component";
 import { createStructuredSelector } from "reselect";
 import { selectCurrentCounter } from "../redux/counter/counter-selector";
 import UseStyles from "./counter-screen-design";
+import { Elements } from '@stripe/react-stripe-js'; // Import Elements
+import { loadStripe } from '@stripe/stripe-js';
+import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+
+// Initialize Stripe outside the component
+const stripePromise = loadStripe('pk_test_QlDA5SL28jaVLd22eF39ymGA00VLnj8ebN');
 
 const CounterScreen = (props) => {
-  const classes = UseStyles();
+  const stripe = useStripe();
+  const elements = useElements();
 
-  const counterIncreaseButtonClicked = () => {
-    props.setCurrentCounter(props.currentCounter + 1);
-  };
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-  const counterDecreaseButtonClicked = () => {
-    if (props.currentCounter > 0)
-      props.setCurrentCounter(props.currentCounter - 1);
+    if (!stripe || !elements) return;
+
+    const cardElement = elements.getElement(CardElement);
+
+    const { token, error } = await stripe.createToken(cardElement);
+
+    if (error) {
+      // Handle error
+      console.log('error')
+    } else {
+      // Send the token to your server
+      // You can use Axios or another library to make a POST request to your Flask server.
+      console.log('token',token)
+    }
   };
 
   return (
-    <Container component="main">
-      <div>v2</div>
-      <div className={classes.paper}>
-        <CounterComponent />
-        <div className= {classes.buttonContainer}>
-          <Button
-            variant="contained"
-            onClick={() => counterDecreaseButtonClicked()}
-          >
-            Decrease
-          </Button>
-
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => counterIncreaseButtonClicked()}
-          >
-            Increase
-          </Button>
-        </div>
-      </div>
-    </Container>
+    <form onSubmit={handleSubmit}>
+      <CardElement />
+      <button type="submit">Pay</button>
+    </form>
   );
 };
 
@@ -54,4 +53,11 @@ const mapStateToProps = createStructuredSelector({
   currentCounter: selectCurrentCounter,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(CounterScreen);
+// Wrap your component with the Elements provider
+const WrappedCounterScreen = () => (
+  <Elements stripe={stripePromise}>
+    <CounterScreen />
+  </Elements>
+);
+
+export default connect(mapStateToProps, mapDispatchToProps)(WrappedCounterScreen);
