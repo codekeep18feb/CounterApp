@@ -32,12 +32,19 @@ jobs:
             
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
-          
-            #Now we have got the access of EC2 and we will start the deploy .
+          ssh -o StrictHostKeyChecking=no -i private_key "${USER_NAME}@${HOSTNAME}" '
+            # Debugging: Print some messages to identify where the issue might be.
+            echo "Script is starting"
             cd /home/ubuntu/CounterApp &&
+            echo "Changed directory"
             git checkout master &&
+            echo "Checked out master branch"
             git fetch --all &&
+            echo "Fetched all branches"
             git reset --hard origin/master &&
+            echo "Reset to origin/master"
             git pull origin master &&
+            echo "Pulled changes from origin/master"
             docker-compose -f docker-compose.prod.yml up -d --build
+            echo "Docker Compose command executed"
+          '
