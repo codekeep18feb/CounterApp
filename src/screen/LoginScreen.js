@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-
-function Login() {
+import { login, logout } from '../redux/counter/AuthAction';
+function Login({login,logout}) {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -20,10 +21,39 @@ function Login() {
       if (response.status === 201) {
         const data = await response.json();
         // Save the token to local storage
-        localStorage.setItem('token', data.token);
-        // Redirect to /people on successful login
-        navigate('/people');
+
+
+        if (data){
+          const response = await fetch('http://localhost:8000/api/me', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${data.token}`, // Replace with your JWT token
+
+          },
+          });
+
+          if (response.status === 200) {
+            localStorage.setItem('token', data.token);
+            const meUser = await response.json();
+            // Save the token to local storage
+            console.log("meUser",meUser)
+            login(meUser)
+            // Redirect to /people on successful login
+            navigate('/chat');
+          } 
+          else {
+            console.log("Unable to fetch data from /ME")
+            setError('Unable to fetch data from "/me" api..');
+          }
+        }
+        // localStorage.setItem('token', data.token);
+        // login({"user_name":"deepak18feb"})
+        // // Redirect to /people on successful login
+        // navigate('/chat');
       } else {
+        console.log("Invalid email or password")
+
         setError('Invalid email or password');
       }
 
@@ -51,7 +81,7 @@ function Login() {
 
 
     } catch (error) {
-      setError('An error occurred while logging in');
+      setError('An error occurred while logging in'+JSON.stringify(error));
     }
   };
 
@@ -80,4 +110,14 @@ function Login() {
   );
 }
 
-export default Login;
+// export default Login;
+
+// const mapStateToProps = (state) => {
+//   console.log("sdfasdsdasomeste",state)
+//   return {
+  
+//     state, // Assuming you have a reducer that manages a "count" property
+//   }
+// };
+
+export default connect(null, { login, logout })(Login);

@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { increment, decrement } from '../redux/counter/counter-action';
 
-const Counter = ({ count, increment, decrement }) => {
+const CounterScree = ({ count, increment, decrement }) => {
   console.log('what is this count here',count)
   return (
     <div>
@@ -22,4 +22,4 @@ const mapStateToProps = (state) => {
   }
 };
 
-export default connect(mapStateToProps, { increment, decrement })(Counter);
+export default connect(mapStateToProps, { increment, decrement })(CounterScree);

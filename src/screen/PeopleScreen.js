@@ -1,78 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react'
 
-function PeopleScreen() {
-  const [profiles, setProfiles] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(async() => {
-    // Fetch data from the /api/profiles endpoint
-    const JWT_TOKEN = localStorage.getItem('token')
-    const token = `Bearer ${JWT_TOKEN}`
-    console.log("token",token)
-    // console.log('JWET',token)
-    // fetch('http://localhost:8000/api/profiles', {
-    //   method: 'GET',
-    //   headers: {
-    //     'Accept': '*/*',
-    //     'Authorization': token, // Replace with your JWT token
-    //     'Content-Type': 'application/json',
-
-    //   },
-    // })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     setProfiles(data);
-    //     setLoading(false);
-    //   })
-    //   .catch((error) => {
-    //     console.error('Error fetching data:', error);
-    //     setLoading(false);
-    //   });
-
-
-    const response2 = await fetch('http://localhost:8000/api/profiles', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': token, // Replace with your JWT token
-      },
-    });
-
-    if (response2.status === 200) {
-      const data = await response2.json();
-      console.log("data",data)
-      setProfiles(data);
-      setLoading(false);
-      // Save the token to local storage
-      // localStorage.setItem('token', data.token);
-      // Redirect to /people on successful login
-      // navigate('/people');
-    } else {
-      console.log('error occured!')
-      // setError('Peopleissu');
-        setLoading(false);
-
-    }
-
-
-  }, []);
-
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
+export default function PeopleScreen({profiles,SetWithEMail,with_email}) {
+  //here will make the call for user online status
   return (
-    <div>
-      <h2>PeopleScreen</h2>
-      <ul>
+    <ul>
         {profiles.map((profile) => (
-          <li key={profile.id}>
-            <strong>ID:</strong> {profile.id}, <strong>Gender:</strong> {profile.gender}  <strong>user_email:</strong> {profile.user_email}
+          <li key={profile.id} onClick={()=>SetWithEMail(profile.user_email)}>
+          {with_email==profile.user_email?<strong>{profile.user_email} - {profile.online?"ONLINE":"OFFLINE"}</strong>:<div>{profile.user_email}</div> }
           </li>
         ))}
       </ul>
-    </div>
-  );
+  )
 }
-
-export default PeopleScreen;

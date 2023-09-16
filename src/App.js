@@ -4,9 +4,9 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 // Import your components
 import HomeScreen from './screen/HomeScreen.js';
 import Login from './screen/LoginScreen.js';
-import PeopleScreen from './screen/PeopleScreen';
+import Chat from './screen/Chat';
 import SignupScreen from './screen/SignupScreen';
-
+import Header from "./screen/Header"
 
 
 
@@ -25,15 +25,16 @@ function useAuth() {
 function App() {
   return (
     <Router>
+      <Header />
       <Routes>
         <Route exact path="/" element={<HomeScreen />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignupScreen />} />
         <Route
-          path="/people"
+          path="/chat"
           element={
             <PrivateRoute>
-              <PeopleScreen />
+              <Chat />
             </PrivateRoute>
           }
         />

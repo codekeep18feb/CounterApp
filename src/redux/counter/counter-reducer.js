@@ -1,17 +1,23 @@
-const INITIAL_STATE = {
-  currentCounter: 0,
+// counterReducer.js
+const initialState = {
+  count: 0,
 };
 
-const CounterReducer = (state = INITIAL_STATE, action) => {
+const counterReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "SET_COUNTER":
+    case 'INCREMENT':
       return {
         ...state,
-        currentCounter: action.payload,
+        count: state.count + 1,
+      };
+    case 'DECREMENT':
+      return {
+        ...state,
+        count: state.count - 1,
       };
     default:
       return state;
   }
 };
 
-export default CounterReducer;
+export default counterReducer;

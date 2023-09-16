@@ -1,18 +1,12 @@
-import { combineReducers } from "redux";
-
-import storage from "redux-persist/lib/storage";
-import { persistReducer } from "redux-persist";
-import CounterReducer from "./counter/counter-reducer";
-
-//Whitelist means which data we want to store in local storage
-const persistConfig = {
-  key: "root",
-  storage,
-  whitelist: ["counter"],
-};
+// reducers.js
+import { combineReducers } from 'redux';
+import counterReducer from './counter/counter-reducer'; // Import your counterReducer here
+import AuthReducer from './counter/AuthReducer'; // Import your counterReducer here
 
 const rootReducer = combineReducers({
-  counter: CounterReducer,
+  counter: counterReducer, // You can give it any key you like
+  auth:AuthReducer
+  // Add other reducers if needed
 });
 
-export default persistReducer(persistConfig, rootReducer);
+export default rootReducer;
