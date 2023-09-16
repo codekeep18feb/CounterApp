@@ -67,7 +67,7 @@ function PeopleScreen() {
       <ul>
         {profiles.map((profile) => (
           <li key={profile.id}>
-            <strong>ID:</strong> {profile.id}, <strong>Gender:</strong> {profile.gender}
+            <strong>ID:</strong> {profile.id}, <strong>Gender:</strong> {profile.gender}  <strong>user_email:</strong> {profile.user_email}
           </li>
         ))}
       </ul>
