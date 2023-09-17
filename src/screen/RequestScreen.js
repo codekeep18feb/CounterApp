@@ -2,36 +2,48 @@ import React, { useEffect, useState } from 'react';
 
 export default function RequestScreen({ with_email }) {
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState(null)
+  const [data, setData] = useState(null);
 
-  useEffect(async() => {
-    // Fetch data from the /api/profiles endpoint
-    const JWT_TOKEN = localStorage.getItem('token')
-    const token = `Bearer ${JWT_TOKEN}`
-    console.log("token",token)
-    const response2 = await fetch(`http://localhost:8000/api/request_info/${with_email}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': token, // Replace with your JWT token
-      },
-    });
+  useEffect(() => {
+    let isMounted = true; // Variable to track whether the component is mounted
 
-    if (response2.status === 200) {
-      const data = await response2.json();
-      console.log("data",data)
-      setData(data)
-      setLoading(false);
-    } else {
-      console.log('error occured!')
-      // setError('Peopleissu');
-        setLoading(false);
+    const fetchData = async () => {
+      const JWT_TOKEN = localStorage.getItem('token');
+      const token = `Bearer ${JWT_TOKEN}`;
 
-    }
+      try {
+        const response = await fetch(`http://localhost:8000/api/request_info/${with_email}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token,
+          },
+        });
 
+        if (isMounted) {
+          if (response.status === 200) {
+            const responseData = await response.json();
+            setData(responseData);
+          } else {
+            console.log('Error occurred while fetching data.');
+          }
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error('An error occurred:', error);
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
 
+    fetchData(); // Call the fetchData function
+
+    // Cleanup function to cancel the asynchronous task when the component unmounts
+    return () => {
+      isMounted = false;
+    };
   }, [with_email]);
-
 
   if (loading) {
     return <p>Loading...</p>;
@@ -39,8 +51,12 @@ export default function RequestScreen({ with_email }) {
 
   return (
     <div>
-      {data?<div>Request Status - {data['status']}</div>:<div>Loading...</div>}
-      <div>user online | offline </div>
+      {data ? (
+        <div>Request Status - {data['status']}</div>
+      ) : (
+        <div>Loading...</div>
+      )}
+      <div>user online | offline</div>
     </div>
   );
 }

@@ -11,7 +11,7 @@ function Chat({auth_data}) {
   const [loading, setLoading] = useState(true);
   const [rtcData, setRTCData] = useState(null);
 
-  console.log("rtcData",rtcData)
+  console.log("is it rerendering.?? mutiple times",rtcData)
   const fetchData = async () => {
     const JWT_TOKEN = localStorage.getItem('token');
     const token = `Bearer ${JWT_TOKEN}`;
