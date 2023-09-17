@@ -1,43 +1,77 @@
-import React from 'react'
-import RequestScreen from "./RequestScreen"
+import React, { useState } from 'react';
 
-export default function ChatScreen({with_email}) {
-  const chats = [
-    {
-      id:1,
-      content:"HI",
-      who:"ME"
-    },
-    {
-      id:2,
-      content:"Hello",
-      who:"ME"
-    },
-    {
-      id:3,
-      content:"how are you!",
-      who:"OTHER"
-    },
-    {
-      id:4,
-      content:"good",
-      who:"ME"
+export default function ChatScreen({ chats, to_email }) {
+  const [textareaValue, setTextareaValue] = useState('');
+  const [sendingMessage, setSendingMessage] = useState(false);
+
+  const handleTextareaChange = (e) => {
+    setTextareaValue(e.target.value);
+  };
+
+  const handleSendMessage = async () => {
+    if (textareaValue.trim() === '') {
+      return; // Don't send empty messages
     }
-  ]
 
-  
+    // Prepare the request body
+    const requestBody = {
+      content: textareaValue,
+    };
+
+    const JWT_TOKEN = localStorage.getItem('token');
+    const token = `Bearer ${JWT_TOKEN}`;
+
+    // Update the UI to indicate sending
+    setSendingMessage(true);
+
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/api/send_msg/${to_email}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token,
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (response.status === 200) {
+        // Message sent successfully
+        console.log('Message sent successfully');
+        setTextareaValue(''); // Clear the textarea after sending
+      } else {
+        console.error('Error sending message');
+      }
+    } catch (error) {
+      console.error('An error occurred:', error);
+    } finally {
+      // Reset the UI after sending
+      setSendingMessage(false);
+    }
+  };
+
   return (
-    <div style={{border:"1px solid red",height:"600px",width:"700px",background: "rgb(221, 237, 240,0.2)"}}>
-        {/* {
-          chats.map(i=>{
-            return(
-              <div key={i} style={{padding:"10px",color:i.who=="ME"?"green":"grey",textAlign:i.who=="ME"?"left":"right",fontStyle:"italic",fontSize:"19px"}}>
-              {i.content}
+    <div>
+      <div style={{ display: "flex", "flex-direction": "column", height: "550px" }}>
+        <div style={{ "flex-grow": 1, "background-color": "lightblue" }}>
+          {chats.map((chat, index) => (
+            <div key={index} style={{ padding: "10px", color: chat.who === "ME" ? "green" : "grey", textAlign: chat.who === "ME" ? "left" : "right", fontStyle: "italic", fontSize: "19px" }}>
+              {chat.content}
             </div>
-            )
-          })
-        } */}
-    {with_email?<RequestScreen with_email={with_email}/>:<div>loading...</div>}
+          ))}
+        </div>
+      </div>
+      <div>
+        <textarea
+          style={{ width: "500px" }}
+          placeholder="Type something..."
+          value={textareaValue}
+          onChange={handleTextareaChange}
+          disabled={sendingMessage} // Disable textarea while sending
+        />
+        <button onClick={handleSendMessage} disabled={sendingMessage}>
+          {sendingMessage ? 'Sending...' : 'Send'}
+        </button>
+      </div>
     </div>
-  )
+  );
 }

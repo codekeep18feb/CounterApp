@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import PeopleScreen from "./PeopleScreen"
-import ChatScreen from "./ChatScreen"
+import ChatWindow from "./ChatWindow"
 import { connect } from 'react-redux';
 
 
 function Chat({auth_data}) {
   const [profiles, setProfiles] = useState([]);
+  const [online_profiles, setOnlineProfiles] = useState([]);
   const [with_email, SetWithEMail] = useState(null);
   const [loading, setLoading] = useState(true);
   console.log("auth_data",auth_data)
@@ -24,26 +25,27 @@ function Chat({auth_data}) {
 
       if (response.status === 200) {
         const data = await response.json();
-        setProfiles(data);
-        setLoading(false);
+
+        setOnlineProfiles(data);
+        // setLoading(false);
       } else {
         console.log('Error occurred while fetching profiles.');
-        setLoading(false);
+        // setLoading(false);
       }
     } catch (error) {
       console.error('An error occurred:', error);
-      setLoading(false);
+      // setLoading(false);
     }
   };
 
 
   useEffect(async() => {
-    // fetchData(); // Fetch data initially
-    // console.log("main useeffect ran")
+    fetchData(); // Fetch data initially
+    console.log("main useeffect ran")
 
-    // const intervalId = setInterval(() => {
-    //   fetchData(); // Fetch data every 10 seconds
-    // }, 10000);
+    const intervalId = setInterval(() => {
+      fetchData(); // Fetch data every 10 seconds
+    }, 10000);
 
     
     // Fetch data from the /api/profiles endpoint
@@ -73,6 +75,40 @@ function Chat({auth_data}) {
 
   }, [with_email]);
 
+  useEffect(()=>{
+      // console.log("new online profiles arrived",online_profiles)
+      // here will make the changes to profiles's online state
+      // if online_profiles has items and not just empty
+            // in that case let's create two arrays 
+              // offline_profiles -> items of profiles where email is not in online_profiles
+              // online_profiles -> items of profiles where email is in online_profiles
+            //now let's loop through these two arrays offline_profiles and online_profiles and update the online status in profiles using setProfiles
+
+        console.log("new online profiles arrived", online_profiles,profiles);
+
+        // Check if online_profiles has items and is not empty
+        if (online_profiles.length > 0) {
+          // Create a set of online email addresses for faster lookup
+          const onlineEmailsSet = new Set(online_profiles);
+      
+          // Update the online status in profiles using setProfiles
+          const updatedProfiles = profiles.map(profile => {
+            if (onlineEmailsSet.has(profile.user_email)) {
+              return { ...profile, online: true };
+            } else {
+              return { ...profile, online: false };
+            }
+          });
+          console.log("updatedProfiles are they not changnin",updatedProfiles)
+          // Set the updated profiles
+          setProfiles(updatedProfiles);
+        }
+      
+          
+
+  },[online_profiles])
+
+
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -83,7 +119,7 @@ function Chat({auth_data}) {
       <PeopleScreen profiles={profiles} SetWithEMail={SetWithEMail} with_email={with_email}/>
       </div>
       <div>
-      {with_email?<ChatScreen with_email={with_email}/>:"loading..."}
+      {with_email?<ChatWindow with_email={with_email}/>:"loading..."}
       </div>
     </div>
   );
