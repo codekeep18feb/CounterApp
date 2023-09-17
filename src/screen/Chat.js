@@ -9,7 +9,9 @@ function Chat({auth_data}) {
   const [online_profiles, setOnlineProfiles] = useState([]);
   const [with_email, SetWithEMail] = useState(null);
   const [loading, setLoading] = useState(true);
-  console.log("auth_data",auth_data)
+  const [rtcData, setRTCData] = useState(null);
+
+  console.log("rtcData",rtcData)
   const fetchData = async () => {
     const JWT_TOKEN = localStorage.getItem('token');
     const token = `Bearer ${JWT_TOKEN}`;
@@ -38,6 +40,32 @@ function Chat({auth_data}) {
     }
   };
 
+  const fetchRTCUserInfo = async () => {
+    const JWT_TOKEN = localStorage.getItem('token');
+    const token = `Bearer ${JWT_TOKEN}`;
+
+    try {
+      const response = await fetch(`http://localhost:8000/api/rtc_user_info_by_id`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token,
+        },
+      });
+
+      if (response.status === 200) {
+        const data = await response.json();
+        setRTCData(data);
+        console.log("datsdafsdaa",data)
+      } else {
+        console.log('Error fetching chat history');
+      }
+    } catch (error) {
+      console.error('An error occurred:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(async() => {
     fetchData(); // Fetch data initially
@@ -65,6 +93,9 @@ function Chat({auth_data}) {
       console.log("data",data)
       setProfiles(data);
       setLoading(false);
+      fetchRTCUserInfo()
+
+      
     } else {
       console.log('error occured!')
       // setError('Peopleissu');
@@ -119,7 +150,7 @@ function Chat({auth_data}) {
       <PeopleScreen profiles={profiles} SetWithEMail={SetWithEMail} with_email={with_email}/>
       </div>
       <div>
-      {with_email?<ChatWindow with_email={with_email}/>:"loading..."}
+      {with_email?<ChatWindow with_email={with_email} rtcData={rtcData}/>:"loading..."}
       </div>
     </div>
   );
