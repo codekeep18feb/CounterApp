@@ -5,8 +5,9 @@ import ChatScreen from "./ChatScreen";
 export default function ChatWindow({ with_email }) {
   const [loading, setLoading] = useState(true);
   const [chatHistory, setChatHistory] = useState([]);
+  const [rtcData, setRTCData] = useState(null);
   const [requestStatus, setRequestStatus] = useState(null);
-
+  console.log("rtcData are you initiator",rtcData)
   useEffect(() => {
     const fetchChatHistory = async () => {
       const JWT_TOKEN = localStorage.getItem('token');
@@ -24,6 +25,32 @@ export default function ChatWindow({ with_email }) {
         if (response.status === 200) {
           const data = await response.json();
           setChatHistory(data);
+        } else {
+          console.log('Error fetching chat history');
+        }
+      } catch (error) {
+        console.error('An error occurred:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    const fetchRTCUserInfo = async () => {
+      const JWT_TOKEN = localStorage.getItem('token');
+      const token = `Bearer ${JWT_TOKEN}`;
+
+      try {
+        const response = await fetch(`http://localhost:8000/api/rtc_user_info_by_id`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token,
+          },
+        });
+
+        if (response.status === 200) {
+          const data = await response.json();
+          // setChatHistory(data);
+          console.log("datsdafsdaa",data)
         } else {
           console.log('Error fetching chat history');
         }
@@ -59,6 +86,7 @@ export default function ChatWindow({ with_email }) {
     };
 
     fetchChatHistory();
+    fetchRTCUserInfo()
     fetchRequestStatus();
   }, [with_email]);
 
