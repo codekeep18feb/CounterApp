@@ -2,19 +2,18 @@ import React, { useEffect, useState } from 'react';
 import RequestScreen from "./RequestScreen";
 import ChatScreen from "./ChatScreen";
 
-export default function ChatWindow({ with_email,with_userid }) {
+export default function ChatWindow({ with_email }) {
   // console.log("here we are", rtcData);
   const [loading, setLoading] = useState(true);
   const [chatHistory, setChatHistory] = useState([]);
   const [requestStatus, setRequestStatus] = useState(null);
-  const [rtcData, setRTCData] = useState(null)
 
   const fetchRTCUserInfo = async () => {
     const JWT_TOKEN = localStorage.getItem('token');
     const token = `Bearer ${JWT_TOKEN}`;
 
     try {
-      const response = await fetch(`http://localhost:8000/api/rtc_user_info_by_id/${with_userid}`, {
+      const response = await fetch(`http://localhost:8000/api/rtc_user_info_by_id`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -306,13 +305,13 @@ export default function ChatWindow({ with_email,with_userid }) {
     console.log("can we decide whatnow",rtcData,rtcData != null && Object.entries(rtcData).length === 0)
     const JWT_TOKEN = localStorage.getItem('token');
     const token = `Bearer ${JWT_TOKEN}`;
-    // if (rtcData != null && Object.entries(rtcData).length === 0) {
-    //   console.log("don't tell we are giong through this?")
-    //   initializeWebRTC(token);
-    // } else if (rtcData != null && Object.entries(rtcData).length > 0) {
-    //   console.log(("arewehereyet"))
-    //   respondeWebRTC(token);
-    // }
+    if (rtcData != null && Object.entries(rtcData).length === 0) {
+      console.log("don't tell we are giong through this?")
+      initializeWebRTC(token);
+    } else if (rtcData != null && Object.entries(rtcData).length > 0) {
+      console.log(("arewehereyet"))
+      respondeWebRTC(token);
+    }
 
     fetchRequestStatus();
   }, [with_email,rtcData]);

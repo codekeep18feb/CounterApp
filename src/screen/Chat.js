@@ -7,11 +7,12 @@ import { connect } from 'react-redux';
 function Chat({auth_data}) {
   const [profiles, setProfiles] = useState([]);
   const [online_profiles, setOnlineProfiles] = useState([]);
-  const [with_email, SetWithEMail] = useState(null);
+  const [with_userid, SetWithUserId] = useState(null);
+  const [with_email, SetWithEmail] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [rtcData, setRTCData] = useState(null);
+  // const [rtcData, setRTCData] = useState(null);
 
-  console.log("is it rerendering.?? mutiple times",rtcData)
+  // console.log("is it rerendering.?? mutiple times",rtcData)
   const fetchData = async () => {
     const JWT_TOKEN = localStorage.getItem('token');
     const token = `Bearer ${JWT_TOKEN}`;
@@ -55,7 +56,7 @@ function Chat({auth_data}) {
 
       if (response.status === 200) {
         const data = await response.json();
-        setRTCData(data);
+        // setRTCData(data);
         console.log("datsdafsdaa",data)
       } else {
         console.log('Error fetching chat history');
@@ -93,7 +94,7 @@ function Chat({auth_data}) {
       console.log("data",data)
       setProfiles(data);
       setLoading(false);
-      fetchRTCUserInfo()
+      // fetchRTCUserInfo()
 
       
     } else {
@@ -104,7 +105,7 @@ function Chat({auth_data}) {
     }
 
 
-  }, [with_email]);
+  }, [with_userid]);
 
   useEffect(()=>{
       // console.log("new online profiles arrived",online_profiles)
@@ -147,10 +148,10 @@ function Chat({auth_data}) {
   return (
     <div style={{display:"flex"}}>
       <div>
-      <PeopleScreen profiles={profiles} SetWithEMail={SetWithEMail} with_email={with_email}/>
+      <PeopleScreen profiles={profiles} SetWithUserId={SetWithUserId} SetWithEmail={SetWithEmail} with_userid={with_userid}/>
       </div>
       <div>
-      {with_email?<ChatWindow with_email={with_email} rtcData={rtcData}/>:"loading..."}
+      {with_userid?<ChatWindow with_email={with_email} with_userid={with_userid}/>:"loading..."}
       </div>
     </div>
   );
