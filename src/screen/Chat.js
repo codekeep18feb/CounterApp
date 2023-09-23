@@ -70,7 +70,7 @@ function Chat({auth_data}) {
 
   useEffect(async() => {
     fetchData(); // Fetch data initially
-    console.log("main useeffect ran")
+    // console.log("main useeffect ran")
 
     const intervalId = setInterval(() => {
       fetchData(); // Fetch data every 10 seconds

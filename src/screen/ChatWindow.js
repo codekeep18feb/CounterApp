@@ -322,7 +322,7 @@ export default function ChatWindow({ with_email,with_userid }) {
 
   useEffect(async() => {
     fetchRTCUserInfo(); // Fetch data initially
-    console.log("main useeffect ran")
+    // console.log("main useeffect ran")
 
     const intervalId = setInterval(() => {
       fetchRTCUserInfo(); // Fetch data every 10 seconds
@@ -439,11 +439,13 @@ export default function ChatWindow({ with_email,with_userid }) {
 
   useEffect(() => {
     if(connected){
-      console.log("if INITIATOR I THING WE CAN INITIATE THE CONNECTION??",myRef.current['type']=="INITIATOR")
+      console.log("HEREISWHATWEHAVE")
+      console.log("if INITIATOR I THING WE CAN INITIATE THE CONNECTION??,",myRef.current,myRef.current['type']=="INITIATOR")
       if (myRef.current['type']=="INITIATOR"){
       // let's perform the thrid step
       console.log("hereAnswer",myRef.current,myRef.current.answer,typeof(myRef.current.answer))//myRef.current.dc.send("douseeme!")
       const answer = JSON.parse(myRef.current.answer)
+      console.log("DOWESEE ANSWER",answer)
       // myRef.current.channel.send("douseeme!")
       // answer = answer
       myRef.current.lc.setRemoteDescription(answer)
