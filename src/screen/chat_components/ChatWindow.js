@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import RequestScreen from "./RequestScreen";
+import RequestScreen from "../RequestScreen";
 import ChatScreen from "./ChatScreen";
 
 export default function ChatWindow({ with_email,with_userid }) {

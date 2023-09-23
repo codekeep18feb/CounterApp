@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 // Import your components
 import HomeScreen from './screen/HomeScreen.js';
 import Login from './screen/LoginScreen.js';
-import Chat from './screen/Chat';
+import Chat from './screen/chat_components/Chat';
 import SignupScreen from './screen/SignupScreen';
 import Header from "./screen/Header"
 

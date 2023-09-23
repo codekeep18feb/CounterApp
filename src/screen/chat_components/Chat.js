@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import PeopleScreen from "./PeopleScreen"
+import PeopleScreen from "../PeopleScreen"
 import ChatWindow from "./ChatWindow"
 import { connect } from 'react-redux';
 
