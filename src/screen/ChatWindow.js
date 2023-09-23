@@ -56,7 +56,7 @@ export default function ChatWindow({ with_email,with_userid }) {
     const JWT_TOKEN = localStorage.getItem('token');
     const token = `Bearer ${JWT_TOKEN}`;
 
-    try {
+    try { 
       const response = await fetch(`http://localhost:8000/api/add_rtc_user`, {
         method: 'POST',
         headers: {
@@ -178,13 +178,24 @@ export default function ChatWindow({ with_email,with_userid }) {
       dc.onopen = (e) => console.log("connection opened!");
   
       lc.onicecandidate = async (e) => {
+        // if (e.candidate) {
+        //   // Candidate is available, call addRTCUserInfo
+        //   console.log("with_email let's fetch user",with_email)
+        //   const to_user_id = await fetchUserId(token,with_email)
+        //   console.log("whatisthisto_user_id",to_user_id)
+        //   addRTCUserInfo(true, JSON.stringify(lc.localDescription),to_user_id);
+        //   // console.log("Notice how many times it's being called...", JSON.stringify(lc.localDescription));
+        // }
+
         if (e.candidate) {
-          // Candidate is available, call addRTCUserInfo
-          console.log("with_email let's fetch user",with_email)
-          const to_user_id = await fetchUserId(token,with_email)
-          console.log("do i see this one",to_user_id)
-          addRTCUserInfo(true, JSON.stringify(lc.localDescription),to_user_id);
-          // console.log("Notice how many times it's being called...", JSON.stringify(lc.localDescription));
+          // Candidate is available, but don't save it yet
+          console.log("ICE candidate available");
+        } else if (lc.iceGatheringState === "complete") {
+          // ICE gathering is complete, save the final ICE candidate to the database
+          console.log("ICE gathering is complete");
+          const to_user_id = await fetchUserId(token, with_email);
+          console.log("Final ICE candidate:", JSON.stringify(lc.localDescription));
+          addRTCUserInfo(true, JSON.stringify(lc.localDescription), to_user_id);
         }
       }
   
@@ -437,6 +448,7 @@ export default function ChatWindow({ with_email,with_userid }) {
       // answer = answer
       myRef.current.lc.setRemoteDescription(answer)
       const intervalId = setInterval(() => {
+        console.log('douseeme!!!')
         myRef.current.channel.send("douseeme! after 10 sec??")
 
       }, 10000);
