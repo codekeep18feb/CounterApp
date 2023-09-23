@@ -178,6 +178,10 @@ export default function ChatWindow({ with_email,with_userid }) {
       dc.onmessage = (e) => {
         
         console.log('msg from B' + e.data);
+        setChats((prevChats) => {
+          console.log('prvchats',prevChats)
+          return [...prevChats, e.data]
+        });
         // setChats([...chats,e.data])
       }
       dc.onopen = (e) => {
@@ -461,8 +465,23 @@ export default function ChatWindow({ with_email,with_userid }) {
 
 
   const sendMsg=(msg)=>{
-    console.log("here is the msg",msg)
+    console.log("here is the msg",msg,myRef.current['type'])
+    setChats((prevChats) => {
+      console.log('prvchats',prevChats)
+      return [...prevChats, msg]
+    });
+    if (myRef.current['type']=="INITIATOR"){
+
+
     myRef.current.channel.send(msg)
+
+    }
+    else{
+      myRef.current.channel.dc.send(msg)
+      
+    }
+
+    // myRef.current['type']=="INITIATOR"
   }
   useEffect(() => {
     if(answer){
