@@ -6,10 +6,11 @@ export default function ChatWindow({ with_email,with_userid }) {
   // console.log("here we are", rtcData);
   const [loading, setLoading] = useState(true);
   const [chatHistory, setChatHistory] = useState([]);
+  const [chats, setChats] = useState([]);
   const [requestStatus, setRequestStatus] = useState(null);
-  const [connected, setConnected] = useState(false)
+  const [answer, setAnswer] = useState(false)
   const myRef = useRef(null);
-
+  const [connection_open, setConnectionOpened] = useState(false)
   const fetchRTCUserInfo = async () => {
     const JWT_TOKEN = localStorage.getItem('token');
     const token = `Bearer ${JWT_TOKEN}`;
@@ -29,13 +30,13 @@ export default function ChatWindow({ with_email,with_userid }) {
         console.log("doesithaveboth?",data.answer,data.sdp)
         if (data && data.answer && data.sdp){
           console.log("bothexist")
-          if (!connected){
+          if (!answer){
             myRef.current = {
               ...myRef.current,
               "answer":data.answer
 
             }
-            setConnected(true)
+            setAnswer(true)
           }
 
         }
@@ -174,8 +175,17 @@ export default function ChatWindow({ with_email,with_userid }) {
       const lc = new RTCPeerConnection();
       const dc = lc.createDataChannel('channel');
   
-      dc.onmessage = (e) => console.log('msg from B' + e.data);
-      dc.onopen = (e) => console.log("connection opened!");
+      dc.onmessage = (e) => {
+        
+        console.log('msg from B' + e.data);
+        // setChats([...chats,e.data])
+      }
+      dc.onopen = (e) => {
+
+        console.log("connection opened!")
+        setConnectionOpened(true)
+
+      };
   
       lc.onicecandidate = async (e) => {
         // if (e.candidate) {
@@ -229,9 +239,23 @@ export default function ChatWindow({ with_email,with_userid }) {
 
           rc.dc=e.channel;
 
-          rc.dc.onmessage = e => console.log("new message from client!!"+e.data)
+          rc.dc.onmessage = e => {
+            // setChats(prv_chat=>[...prv_chat,e.data])
+            if (e.data){
+              // const old_chats = JSON.parse(JSON.stringify(chats))
+              // console.log("old_chats",old_chats)
+              // setChats([...old_chats,e.data])
+              setChats((prevChats) => {
+                console.log('prvchats',prevChats)
+                return [...prevChats, e.data]
+              });
 
-          rc.dc.onopen = e => console.log("connection opened!")
+              console.log("new message from client A!!",e.data)}
+            }
+
+          rc.dc.onopen = e => {
+            setConnectionOpened(true)
+            console.log("connection opened!")}
 
           
 
@@ -246,7 +270,7 @@ export default function ChatWindow({ with_email,with_userid }) {
     }
     
   };
-
+  console.log("chatsdfdsfas",chats)
   // const respondeWebRTC = () => {
   //   // Implement your response logic here
   // }
@@ -438,7 +462,7 @@ export default function ChatWindow({ with_email,with_userid }) {
 
 
   useEffect(() => {
-    if(connected){
+    if(answer){
       console.log("HEREISWHATWEHAVE")
       console.log("if INITIATOR I THING WE CAN INITIATE THE CONNECTION??,",myRef.current,myRef.current['type']=="INITIATOR")
       if (myRef.current['type']=="INITIATOR"){
@@ -449,25 +473,34 @@ export default function ChatWindow({ with_email,with_userid }) {
       // myRef.current.channel.send("douseeme!")
       // answer = answer
       myRef.current.lc.setRemoteDescription(answer)
+      let i=0
       const intervalId = setInterval(() => {
-        console.log('douseeme!!!')
-        myRef.current.channel.send("douseeme! after 10 sec??")
+        i+=1
+        console.log('douseeme!!!',i)
+        myRef.current.channel.send(`msg from A-${i}`)
 
       }, 10000);
       }
 
     }
-  }, [connected])
+  }, [answer])
   
   return (
     <div style={{ border: "1px solid red", height: "600px", width: "700px", background: "rgb(221, 237, 240,0.2)" }}>
       {loading ? (
         <p>Loading...</p>
-      ) : requestStatus !== "ACCEPTED" ? (
+      ) : connection_open ? (
+        <ChatScreen with_email={with_email} chats={chats} />
+      ): requestStatus !== "ACCEPTED" ? (
         <RequestScreen with_email={with_email} />
-      ) : (
-        <ChatScreen to_email={with_email} chats={chatHistory} />
-      )}
+      )
+      
+      : (
+        <div>Nothing Matched!</div>
+      )
+      
+      
+      }
     </div>
   );
 }

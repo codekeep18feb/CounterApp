@@ -55,7 +55,7 @@ export default function ChatScreen({ chats, to_email }) {
         <div style={{ "flex-grow": 1, "background-color": "lightblue" }}>
           {chats.map((chat, index) => (
             <div key={index} style={{ padding: "10px", color: chat.who === "ME" ? "green" : "grey", textAlign: chat.who === "ME" ? "left" : "right", fontStyle: "italic", fontSize: "19px" }}>
-              {chat.content}
+              {chat}
             </div>
           ))}
         </div>
