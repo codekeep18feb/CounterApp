@@ -460,7 +460,10 @@ export default function ChatWindow({ with_email,with_userid }) {
   }, [with_email]);
 
 
-
+  const sendMsg=(msg)=>{
+    console.log("here is the msg",msg)
+    myRef.current.channel.send(msg)
+  }
   useEffect(() => {
     if(answer){
       console.log("HEREISWHATWEHAVE")
@@ -473,13 +476,13 @@ export default function ChatWindow({ with_email,with_userid }) {
       // myRef.current.channel.send("douseeme!")
       // answer = answer
       myRef.current.lc.setRemoteDescription(answer)
-      let i=0
-      const intervalId = setInterval(() => {
-        i+=1
-        console.log('douseeme!!!',i)
-        myRef.current.channel.send(`msg from A-${i}`)
+      // let i=0
+      // const intervalId = setInterval(() => {
+      //   i+=1
+      //   console.log('douseeme!!!',i)
+      //   myRef.current.channel.send(`msg from A-${i}`)
 
-      }, 10000);
+      // }, 10000);
       }
 
     }
@@ -490,7 +493,7 @@ export default function ChatWindow({ with_email,with_userid }) {
       {loading ? (
         <p>Loading...</p>
       ) : connection_open ? (
-        <ChatScreen with_email={with_email} chats={chats} />
+        <ChatScreen with_email={with_email} chats={chats} sendMsg={sendMsg}/>
       ): requestStatus !== "ACCEPTED" ? (
         <RequestScreen with_email={with_email} />
       )

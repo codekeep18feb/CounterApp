@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 
-export default function ChatScreen({ chats, to_email }) {
+export default function ChatScreen({ chats, to_email,sendMsg }) {
   const [textareaValue, setTextareaValue] = useState('');
   const [sendingMessage, setSendingMessage] = useState(false);
-
   const handleTextareaChange = (e) => {
     setTextareaValue(e.target.value);
   };
@@ -11,6 +10,10 @@ export default function ChatScreen({ chats, to_email }) {
   const handleSendMessage = async () => {
     if (textareaValue.trim() === '') {
       return; // Don't send empty messages
+    }
+    else{
+      sendMsg(textareaValue)
+      setTextareaValue('')
     }
 
     // Prepare the request body
@@ -69,7 +72,8 @@ export default function ChatScreen({ chats, to_email }) {
           disabled={sendingMessage} // Disable textarea while sending
         />
         <button onClick={handleSendMessage} disabled={sendingMessage}>
-          {sendingMessage ? 'Sending...' : 'Send'}
+          Send
+          {/* {sendingMessage ? 'Sending...' : 'Send'} */}
         </button>
       </div>
     </div>
