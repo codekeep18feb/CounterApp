@@ -180,7 +180,7 @@ export default function ChatWindow({ with_email,with_userid }) {
         console.log('msg from B' + e.data);
         setChats((prevChats) => {
           console.log('prvchats',prevChats)
-          return [...prevChats, e.data]
+          return [...prevChats, {"content":e.data}]
         });
         // setChats([...chats,e.data])
       }
@@ -251,7 +251,7 @@ export default function ChatWindow({ with_email,with_userid }) {
               // setChats([...old_chats,e.data])
               setChats((prevChats) => {
                 console.log('prvchats',prevChats)
-                return [...prevChats, e.data]
+                return [...prevChats, {"content":e.data}]
               });
 
               console.log("new message from client A!!",e.data)}
@@ -451,7 +451,7 @@ export default function ChatWindow({ with_email,with_userid }) {
         console.log("dowehave rc",rc)
 
         if (rc){
-          myRef.current = {
+          myRef.current ={ 
             "type":"RESPONDER",
             "channel":rc
           }
@@ -468,7 +468,7 @@ export default function ChatWindow({ with_email,with_userid }) {
     console.log("here is the msg",msg,myRef.current['type'])
     setChats((prevChats) => {
       console.log('prvchats',prevChats)
-      return [...prevChats, msg]
+      return [...prevChats, {"content":msg,"who":"ME"}]
     });
     if (myRef.current['type']=="INITIATOR"){
 

@@ -57,8 +57,12 @@ export default function ChatScreen({ chats, to_email,sendMsg }) {
       <div style={{ display: "flex", "flex-direction": "column", height: "550px" }}>
         <div style={{ "flex-grow": 1, "background-color": "lightblue" }}>
           {chats.map((chat, index) => (
-            <div key={index} style={{ padding: "10px", color: chat.who === "ME" ? "green" : "grey", textAlign: chat.who === "ME" ? "left" : "right", fontStyle: "italic", fontSize: "19px" }}>
-              {chat}
+            <div key={index} 
+            
+            style={{ padding: "10px", color: Object.keys("who") && chat.who !== "ME" ? "green" : "grey", textAlign: Object.keys("who") && chat.who === "ME" ? "left" : "right", fontStyle: "italic", fontSize: "19px" }}
+            
+            >
+              {chat.content}
             </div>
           ))}
         </div>
