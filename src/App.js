@@ -7,6 +7,7 @@ import Login from './screen/LoginScreen.js';
 import Chat from './screen/chat_components/Chat';
 import SignupScreen from './screen/SignupScreen';
 import Header from "./screen/Header"
+import Video from './screen/video_components/Video.js';
 
 
 
@@ -35,6 +36,15 @@ function App() {
           element={
             <PrivateRoute>
               <Chat />
+            </PrivateRoute>
+          }
+        />
+
+<Route
+          path="/video_chat"
+          element={
+            <PrivateRoute>
+              <Video />
             </PrivateRoute>
           }
         />
