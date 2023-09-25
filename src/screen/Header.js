@@ -18,7 +18,7 @@ function Header({auth_data,logout}) {
       const token = `Bearer ${JWT_TOKEN}`
       console.log("token",token)
 
-      const response = await fetch('http://localhost:8000/api/logout', {
+      const response = await fetch('http://192.168.1.7:8000/api/logout', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

@@ -11,6 +11,7 @@ export default function VideoWindow({ with_email,with_userid }) {
   const [answer, setAnswer] = useState(false)
   const myRef = useRef(null);
   
+  const yourVideoRef = useRef(null);
   const [videoStream, setVideoStream] = useState(null);
 
   const [connection_open, setConnectionOpened] = useState(false)
@@ -19,7 +20,7 @@ export default function VideoWindow({ with_email,with_userid }) {
     const token = `Bearer ${JWT_TOKEN}`;
 
     try {
-      const response = await fetch(`http://localhost:8000/api/rtc_user_info_by_id/${with_userid}`, {
+      const response = await fetch(`http://192.168.1.7:8000/api/rtc_user_info_by_id/${with_userid}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -61,7 +62,7 @@ export default function VideoWindow({ with_email,with_userid }) {
     const token = `Bearer ${JWT_TOKEN}`;
 
     try { 
-      const response = await fetch(`http://localhost:8000/api/add_rtc_user`, {
+      const response = await fetch(`http://192.168.1.7:8000/api/add_rtc_user`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -97,7 +98,7 @@ export default function VideoWindow({ with_email,with_userid }) {
     const token = `Bearer ${JWT_TOKEN}`;
 
     try {
-      const response = await fetch(`http://localhost:8000/api/add_rtc_user`, {
+      const response = await fetch(`http://192.168.1.7:8000/api/add_rtc_user`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -129,7 +130,7 @@ export default function VideoWindow({ with_email,with_userid }) {
     const token = `Bearer ${JWT_TOKEN}`;
 
     try {
-      const response = await fetch(`http://localhost:8000/api/rtc_user_info_by_id/${with_userid}`, {
+      const response = await fetch(`http://192.168.1.7:8000/api/rtc_user_info_by_id/${with_userid}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -152,9 +153,9 @@ export default function VideoWindow({ with_email,with_userid }) {
   };
   const fetchUserId = async (token,with_email)=>{
 
-    // http://127.0.0.1:8000/api/users/query?q_email=deepaksingh.18feb%40gmail.com
+    // http://192.168.1.7:8000/api/users/query?q_email=deepaksingh.18feb%40gmail.com
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/users/query?q_email=${with_email}`, {
+      const response = await fetch(`http://192.168.1.7:8000/api/users/query?q_email=${with_email}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -183,7 +184,8 @@ export default function VideoWindow({ with_email,with_userid }) {
       const lc = new RTCPeerConnection();
       const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
       console.log("doweseestream",stream)
-      myRef.current = {"srcObject":stream};
+      yourVideoRef.current.srcObject = stream
+      // myRef.current = {"srcObject":stream};
       setStream(stream);
       lc.addStream(stream);
       lc.onaddstream = (event) => {
@@ -390,7 +392,7 @@ export default function VideoWindow({ with_email,with_userid }) {
       const token = `Bearer ${JWT_TOKEN}`;
 
       try {
-        const response = await fetch(`http://localhost:8000/api/chathistory/${with_email}`, {
+        const response = await fetch(`http://192.168.1.7:8000/api/chathistory/${with_email}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -416,7 +418,7 @@ export default function VideoWindow({ with_email,with_userid }) {
       const token = `Bearer ${JWT_TOKEN}`;
 
       try {
-        const response = await fetch(`http://localhost:8000/api/request_info/${with_email}`, {
+        const response = await fetch(`http://192.168.1.7:8000/api/request_info/${with_email}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -552,24 +554,15 @@ export default function VideoWindow({ with_email,with_userid }) {
     <div>
 
       {JSON.stringify(connection_open)}
-      {/* {connection_open?<video ref={myRef.current.channel} autoPlay muted style={{ width: '100%', height: '100%' }}/>:<div>garib</div>} */}
-      {/* <video ref={remoteVideoRef} autoPlay /> */}
-    </div>
-    // <div style={{ border: "1px solid red", height: "600px", width: "700px", background: "rgb(221, 237, 240,0.2)" }}>
-    //   {loading ? (
-    //     <p>Loading...</p>
-    //   ) : connection_open ? (
-    //     <VideoScreen with_email={with_email} chats={chats} sendMsg={sendMsg}/>
-    //   ): requestStatus !== "ACCEPTED" ? (
-    //     <RequestScreen with_email={with_email} />
-    //   )
-      
-    //   : (
-    //     <div>Nothing Matched!</div>
-    //   )
-      
-      
-    //   }
-    // </div>
+      <video
+        ref={yourVideoRef} // Add a ref to the video element
+        autoPlay
+        playsInline
+        muted // You may want to remove this if it's not the local video
+        // Add other attributes such as width, height, etc.
+      ></video>
+
+     </div>
+    
   );
 }

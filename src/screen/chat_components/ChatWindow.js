@@ -16,7 +16,7 @@ export default function ChatWindow({ with_email,with_userid }) {
     const token = `Bearer ${JWT_TOKEN}`;
 
     try {
-      const response = await fetch(`http://localhost:8000/api/rtc_user_info_by_id/${with_userid}`, {
+      const response = await fetch(`http://192.168.1.7:8000/api/rtc_user_info_by_id/${with_userid}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -53,12 +53,12 @@ export default function ChatWindow({ with_email,with_userid }) {
 
   
   const addRTCUserInfo = async (isInitiator, sdp,to_user) => {
-    console.log("am I being called", isInitiator, sdp);
+    console.log("hereisto_user", isInitiator, sdp,to_user);
     const JWT_TOKEN = localStorage.getItem('token');
     const token = `Bearer ${JWT_TOKEN}`;
 
     try { 
-      const response = await fetch(`http://localhost:8000/api/add_rtc_user`, {
+      const response = await fetch(`http://192.168.1.7:8000/api/add_rtc_user`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ export default function ChatWindow({ with_email,with_userid }) {
     const token = `Bearer ${JWT_TOKEN}`;
 
     try {
-      const response = await fetch(`http://localhost:8000/api/add_rtc_user`, {
+      const response = await fetch(`http://192.168.1.7:8000/api/add_rtc_user`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -122,7 +122,7 @@ export default function ChatWindow({ with_email,with_userid }) {
     const token = `Bearer ${JWT_TOKEN}`;
 
     try {
-      const response = await fetch(`http://localhost:8000/api/rtc_user_info_by_id/${with_userid}`, {
+      const response = await fetch(`http://192.168.1.7:8000/api/rtc_user_info_by_id/${with_userid}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -145,9 +145,9 @@ export default function ChatWindow({ with_email,with_userid }) {
   };
   const fetchUserId = async (token,with_email)=>{
 
-    // http://127.0.0.1:8000/api/users/query?q_email=deepaksingh.18feb%40gmail.com
+    // http://192.168.1.7:8000/api/users/query?q_email=deepaksingh.18feb%40gmail.com
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/users/query?q_email=${with_email}`, {
+      const response = await fetch(`http://192.168.1.7:8000/api/users/query?q_email=${with_email}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -365,7 +365,7 @@ export default function ChatWindow({ with_email,with_userid }) {
       const token = `Bearer ${JWT_TOKEN}`;
 
       try {
-        const response = await fetch(`http://localhost:8000/api/chathistory/${with_email}`, {
+        const response = await fetch(`http://192.168.1.7:8000/api/chathistory/${with_email}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -391,7 +391,7 @@ export default function ChatWindow({ with_email,with_userid }) {
       const token = `Bearer ${JWT_TOKEN}`;
 
       try {
-        const response = await fetch(`http://localhost:8000/api/request_info/${with_email}`, {
+        const response = await fetch(`http://192.168.1.7:8000/api/request_info/${with_email}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
