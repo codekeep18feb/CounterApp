@@ -1,47 +1,31 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import React from 'react'
+import MaterialScreen from './screen/MaterialScreen'
+import MaterialUIExample from './screen/MaterialUIExample'
+import AdvancedMaterialUIExample from './screen/AdvancedMaterialUIExample'
+import TabPanel from "./screen/TabPanel"
 
-// Import your components
-import HomeScreen from './screen/HomeScreen.js';
-import Login from './screen/LoginScreen.js';
-import Chat from './screen/Chat';
-import SignupScreen from './screen/SignupScreen';
-import Header from "./screen/Header"
+import ModalDialog from "./screen/ModalDialog"
+import SnackbarExample from "./screen/SnackbarExample"
+import ItemList from './screen/ItemList'
+import StepperExample from './screen/StepperExample'
+import AccordionExample from './screen/AccordionExample'
+import TooltipExample from './screen/TooltipExample'
+import SnackbarWithActions from './screen/SnackbarWithActions'
 
-
-
-function PrivateRoute({ children }) {
-  const auth = useAuth();
-  return auth ? children : <Navigate to="/login" />;
-}
-
-
-
-function useAuth() {
-  return localStorage.getItem('token') !== null;
-}
-
-
-function App() {
+export default function App() {
   return (
-    <Router>
-      <Header />
-      <Routes>
-        <Route exact path="/" element={<HomeScreen />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignupScreen />} />
-        <Route
-          path="/chat"
-          element={
-            <PrivateRoute>
-              <Chat />
-            </PrivateRoute>
-          }
-        />
-
-      </Routes>
-    </Router>
-  );
+    // <MaterialScreen />
+    <>
+    <MaterialUIExample />
+    <AdvancedMaterialUIExample />
+    <TabPanel />
+    <ModalDialog />
+    <SnackbarExample />
+    <ItemList />
+    <StepperExample />
+    <AccordionExample />
+    <TooltipExample />
+    <SnackbarWithActions />
+    </>
+  )
 }
-
-export default App;

@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import RequestScreen from "./RequestScreen";
 import ChatScreen from "./ChatScreen";
+import { object } from 'prop-types';
 
 export default function ChatWindow({ with_email,with_userid }) {
   // console.log("here we are", rtcData);
@@ -8,6 +9,7 @@ export default function ChatWindow({ with_email,with_userid }) {
   const [chatHistory, setChatHistory] = useState([]);
   const [requestStatus, setRequestStatus] = useState(null);
   const [rtcData, setRTCData] = useState(null)
+  const myRef = useRef(null);
 
   const fetchRTCUserInfo = async () => {
     const JWT_TOKEN = localStorage.getItem('token');
@@ -24,7 +26,8 @@ export default function ChatWindow({ with_email,with_userid }) {
 
       if (response.status === 200) {
         const data = await response.json();
-        setRTCData(data);
+        return Object.entries(data).length == 0 ? null : data
+        // setRTCData(data);
         console.log("datsdafsdaa",data)
       } else {
         console.log('Error fetching chat history');
@@ -176,7 +179,8 @@ export default function ChatWindow({ with_email,with_userid }) {
     lc.createOffer()
       .then((o) => lc.setLocalDescription(o))
       .then((a) => console.log('offer set successfully!'));
-  };
+    
+    };
 
   // const respondeWebRTC = () => {
   //   // Implement your response logic here
@@ -251,7 +255,7 @@ export default function ChatWindow({ with_email,with_userid }) {
   };
 
 
-  useEffect(() => {
+  useEffect(async () => {
     const fetchChatHistory = async () => {
       const JWT_TOKEN = localStorage.getItem('token');
       const token = `Bearer ${JWT_TOKEN}`;
@@ -315,7 +319,16 @@ export default function ChatWindow({ with_email,with_userid }) {
     // }
 
     fetchRequestStatus();
+    const data = await fetchRTCUserInfo()
+    if (data == null){
+      initializeWebRTC()
+    }
+    myRef.current.value = 'New Value';
+    console.log("myRef's updated value:", myRef.current);
+
   }, [with_email,rtcData]);
+
+  console.log("myRef",myRef.current)
 
   return (
     <div style={{ border: "1px solid red", height: "600px", width: "700px", background: "rgb(221, 237, 240,0.2)" }}>
