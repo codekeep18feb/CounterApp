@@ -20,7 +20,7 @@ export default function VideoWindow({ with_email,with_userid }) {
     const token = `Bearer ${JWT_TOKEN}`;
 
     try {
-      const response = await fetch(`http://192.168.1.7:8000/api/rtc_user_info_by_id/${with_userid}`, {
+      const response = await fetch(`http://3.93.61.41:8000/api/rtc_user_info_by_id/${with_userid}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ export default function VideoWindow({ with_email,with_userid }) {
     const token = `Bearer ${JWT_TOKEN}`;
 
     try { 
-      const response = await fetch(`http://192.168.1.7:8000/api/add_rtc_user`, {
+      const response = await fetch(`http://3.93.61.41:8000/api/add_rtc_user`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -98,7 +98,7 @@ export default function VideoWindow({ with_email,with_userid }) {
     const token = `Bearer ${JWT_TOKEN}`;
 
     try {
-      const response = await fetch(`http://192.168.1.7:8000/api/add_rtc_user`, {
+      const response = await fetch(`http://3.93.61.41:8000/api/add_rtc_user`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -130,7 +130,7 @@ export default function VideoWindow({ with_email,with_userid }) {
     const token = `Bearer ${JWT_TOKEN}`;
 
     try {
-      const response = await fetch(`http://192.168.1.7:8000/api/rtc_user_info_by_id/${with_userid}`, {
+      const response = await fetch(`http://3.93.61.41:8000/api/rtc_user_info_by_id/${with_userid}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -153,9 +153,9 @@ export default function VideoWindow({ with_email,with_userid }) {
   };
   const fetchUserId = async (token,with_email)=>{
 
-    // http://192.168.1.7:8000/api/users/query?q_email=deepaksingh.18feb%40gmail.com
+    // http://3.93.61.41:8000/api/users/query?q_email=deepaksingh.18feb%40gmail.com
     try {
-      const response = await fetch(`http://192.168.1.7:8000/api/users/query?q_email=${with_email}`, {
+      const response = await fetch(`http://3.93.61.41:8000/api/users/query?q_email=${with_email}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -392,7 +392,7 @@ export default function VideoWindow({ with_email,with_userid }) {
       const token = `Bearer ${JWT_TOKEN}`;
 
       try {
-        const response = await fetch(`http://192.168.1.7:8000/api/chathistory/${with_email}`, {
+        const response = await fetch(`http://3.93.61.41:8000/api/chathistory/${with_email}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -418,7 +418,7 @@ export default function VideoWindow({ with_email,with_userid }) {
       const token = `Bearer ${JWT_TOKEN}`;
 
       try {
-        const response = await fetch(`http://192.168.1.7:8000/api/request_info/${with_email}`, {
+        const response = await fetch(`http://3.93.61.41:8000/api/request_info/${with_email}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
